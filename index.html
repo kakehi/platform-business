@@ -9,23 +9,60 @@
         var businessModel = ['Netflix', 'WeWork'];
         var businessIdeas = ['Refrigerators', 'Books', 'Toilets', 'Smoothies', 'Obligations', 'Nations', 'Villages', 'Opportunities', 'Contracts', 'Credit cards', 'Islands', 'Jamaicans', 'Beans', 'Boxes', 'Pastas', 'Potatos', 'Cicadas', 'DVDs', 'Wax', 'Movies', 'Mints', 'Movie theaters', 'картина', 'Sheppard', 'Fevers', 'Chimneys', 'Birthdays', 'Kids', 'Nieces', 'Nitrogens', 'Brothers', 'Memories', 'Vitamins', 'HBOs', 'WeWorks', 'Tomato soups', 'Trojans', 'Plumbers', 'Sergeants', 'Hand dryers', 'Eggplants', 'Passions', 'Dreams', 'Canivas', 'Hopes', 'Cafe au laits', 'Traps', 'Traps', 'Cross stitches', 'Seat belts', 'Cardigans', 'Wasabis', '7th avenues', 'Shish kebabs', 'Stones', 'Shiitake mushrooms', 'Phenomena', 'Detectives', 'Shampoo huts', 'Micromanagements'];
 
+        var businessAdjectives = ['data-driven', 'user-centric', 'consumer-facing', 'mobile-first', 'next-generation'];
+        var businessNounes = ['service', 'business', 'technology', 'social', 'media'];
+
         var generatedCount = 0;
 
-        function generatePlatformBusiness(){
-            var businessIdea = '';
-            var randomCount = Math.floor((Math.random() * businessIdeas.length));
-            businessIdea = businessIdeas[randomCount];
-            businessIdeas.splice(randomCount, 1); 
-            return businessIdea;
+
+        function getNumberOfArrayObject (arr, count){
+            var r = [];
+            for (var i=0; i<count; i++){
+                var randomCount = Math.floor((Math.random() * arr.length));
+                r.push(arr[randomCount]);
+                arr.splice(randomCount, 1); 
+            }
+            return r;
         }
+
         function populatePlatformBusiness(tag, text){
-            console.log(text);
             setTimeout(function(){
                 tag.find('#business_loader').css({'display':'none'});
                 tag.find('h1').css({'display':'block'});
                 tag.find('h1').text(text);
                 tag.find('h1').fadeIn();
             }, 0);
+        }
+
+        function populatePlatformBusinessDescription(tag){
+            var r = ''
+            var tempArray = JSON.parse(JSON.stringify(businessAdjectives));
+            var arr = getNumberOfArrayObject(tempArray, 3);
+            for (i=0; i<arr.length; i++){
+                if(i==0)
+                    r = r.concat('We are the ');
+                else
+                    r = r.concat(', ');
+
+                r = r.concat(arr[i]);
+            }
+            tempArray = JSON.parse(JSON.stringify(businessNounes));
+            arr = getNumberOfArrayObject(tempArray, 2);
+            for (i=0; i<arr.length; i++){
+                r = r.concat(' ');
+                r = r.concat(arr[i]);
+
+                if(i==arr.length-1)
+                    r = r.concat(' platform.');
+                    
+            }
+            setTimeout(function(){
+                tag.find('#business_loader').css({'display':'none'});
+                tag.find('h2').css({'display':'block'});
+                tag.find('h2').text(r);
+                tag.find('h2').fadeIn();
+            }, 0);
+
         }
 
         var delay = 2000;
@@ -56,12 +93,16 @@
                     $('#newBusinessModel > h1').css({'display':'none'});
                     $('#newBusinessOf > h1').css({'display':'block'});
                     $('#newBusinessIdea > h1').css({'display':'none'});
+                    $('#newBusinessDescription > h2').css({'display':'none'});
                     $('#newBusinessModel > #business_loader').css({'display':'block'});
                     $('#newBusinessIdea > #business_loader').css({'display':'block'});
+                    $('#newBusinessDescription > #business_loader').css({'display':'block'});
 
                     setTimeout(function(){
                         populatePlatformBusiness($('#newBusinessModel'), businessModel[modelVar]);
-                        populatePlatformBusiness($('#newBusinessIdea'), generatePlatformBusiness());
+                        populatePlatformBusiness($('#newBusinessIdea'), getNumberOfArrayObject(businessIdeas, 1)[0]);
+
+                        populatePlatformBusinessDescription($('#newBusinessDescription'));
 
                         loading = false;
 
@@ -92,7 +133,7 @@
         <div id="container">
             <h1 class="title" id="past">We tried Netflix of News</h1>
 
-            <h2 id="future">This is the new platform we will work together next!</h2>
+            <h2 class='subtitle' id="future">This is the new platform we will work together next!</h2>
             <button id="generator" class="ui yellow button">Generate Platform Business</button>
             <div class="clear"></div>
             <div class="title" id="newBusiness">
@@ -103,6 +144,10 @@
                 <div id='newBusinessOf'><h1 class="title">&nbsp;of&nbsp;</h1></div>
                 <div id='newBusinessIdea'>
                     <h1 class="title"></h1>
+                    <div id="business_loader" class="ui active centered inline loader"></div>
+                </div>
+                <div id='newBusinessDescription'>
+                    <h2 class='subtitle' id="description"></h2>
                     <div id="business_loader" class="ui active centered inline loader"></div>
                 </div>
             </div>
